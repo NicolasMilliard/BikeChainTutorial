@@ -234,6 +234,19 @@
       "type": "function"
     },
     {
+      "inputs": [],
+      "name": "isOwner",
+      "outputs": [
+        {
+          "internalType": "bool",
+          "name": "",
+          "type": "bool"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
       "inputs": [
         {
           "internalType": "address",
@@ -337,5 +350,5 @@
       "type": "function"
     }
   ],
-      "contractAddress": "0xeC67287c031a8df4a78AC9Db95f30109c12590FB"
+      "contractAddress": "0x7632992415dE6c7823BD1CBD72df07BcA0710280"
 }
