@@ -68,9 +68,14 @@ contract BikeChain {
             return 0;
         } else {
             uint timespan = renterTimespan(renters[walletAddress].start, renters[walletAddress].end);
-            uint timespanInMinutes = timespan / 60;
-            return timespanInMinutes;
-            // return 5;
+
+            // minimum duration is one minute
+            if(timespan >= 60) {
+                uint timespanInMinutes = timespan / 60;
+                return timespanInMinutes;
+            } else {
+                return 1;
+            }
         }
     }
 
@@ -99,7 +104,7 @@ contract BikeChain {
 
     function setDue(address walletAddress) internal {
         uint timespanInMinutes = getTotalDuration(walletAddress);
-        renters[walletAddress].due = timespanInMinutes * 1000000000000000; // 0.001 BNB
+        renters[walletAddress].due = timespanInMinutes * 1000000000000000; // 0.001 BNB per minute
     }
 
     function getDue(address walletAddress) public isRenter(walletAddress) view returns(uint) {
