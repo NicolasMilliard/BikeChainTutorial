@@ -12,7 +12,8 @@ import { useContext } from 'react'
 import { BlockchainContext } from '../context/BlockchainContext'
 
 export default function PayForm() {
-  const { makePayment } = useContext(BlockchainContext)
+  const { makePayment, due } = useContext(BlockchainContext)
+
   const {
     handleSubmit,
     register,
@@ -41,8 +42,14 @@ export default function PayForm() {
             type='number'
             step='any'
             placeholder='Payment'
+            defaultValue={due}
             {...register('payment', {
-                required: 'This is required'
+                required: 'This is required',
+                max: {
+                  value: due,
+                  message: 'You cannot pay more than your due'
+                }
+
             })}
             />
             <FormErrorMessage>
