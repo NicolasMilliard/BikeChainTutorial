@@ -7,15 +7,16 @@ import { toast } from "react-toastify";
 export const BlockchainContext = React.createContext("");
 
 export const BlockchainProvider = ({ children }) => {
-    const [owner, setOwner] = useState(false)
     const [currentAccount, setCurrentAccount] = useState("")
-    const [balance, setBalance] = useState()
     const [renterExists, setRenterExists] = useState()
     const [renter, setRenter] = useState()
     const [firstName, setFirstName] = useState()
     const [renterBalance, setRenterBalance] = useState()
     const [due, setDue] = useState()
     const [duration, setDuration] = useState()
+    const [owner, setOwner] = useState(false)
+    const [balance, setBalance] = useState()
+    const [ownerBalance, setOwnerBalance] = useState()
 
     const provider = new ethers.providers.Web3Provider(window.ethereum)
     const signer = provider.getSigner()
@@ -53,16 +54,6 @@ export const BlockchainProvider = ({ children }) => {
         }
     }
 
-    const getBalance = async() => {
-        try {
-            const contractBalance = await contract.balanceOf()
-            setBalance(ethers.utils.formatEther(contractBalance))
-            console.log('contractBalance: ' + contractBalance)
-        } catch (error) {
-            console.log(error)
-        }
-    }
-
     const checkRenterExists =async () => {
         try {
             if(currentAccount) {
@@ -92,7 +83,6 @@ export const BlockchainProvider = ({ children }) => {
             if(currentAccount) {
                 const renter = await contract.getRenter(currentAccount)
                 setRenter(renter)
-                console.log('Renter: ' + renter.active)
             }
         } catch (error) {
             console.log(error)
@@ -209,6 +199,28 @@ export const BlockchainProvider = ({ children }) => {
         }
     }
 
+    const getBalance = async() => {
+        try {
+            if(currentAccount) {
+                const contractBalance = await contract.balanceOf()
+                setBalance(ethers.utils.formatEther(contractBalance))
+            }
+        } catch (error) {
+            console.log(error)
+        }
+    }
+    
+    const getOwnerBalance = async() => {
+        try {
+            if(currentAccount) {
+                const ownerBalance = await contract.getOwnerBalance()
+                setOwnerBalance(ethers.utils.formatEther(ownerBalance))
+            }
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
     // when the context (dashboard) loads
     useEffect( () => {
         checkIfWalletIsConnected()
@@ -216,8 +228,10 @@ export const BlockchainProvider = ({ children }) => {
         getRenterBalance()
         getDue()
         getTotalDuration()
-        isOwner()
         getRenterFirstName()
+        isOwner()
+        getBalance()
+        getOwnerBalance()
     }, [currentAccount])
 
     return (
@@ -236,7 +250,9 @@ export const BlockchainProvider = ({ children }) => {
             renter,
             makePayment,
             checkOut,
-            checkIn
+            checkIn,
+            balance,
+            ownerBalance
         }}>
                 { children }
         </BlockchainContext.Provider>
