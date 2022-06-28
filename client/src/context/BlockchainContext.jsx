@@ -201,7 +201,8 @@ export const BlockchainProvider = ({ children }) => {
 
     const getBalance = async() => {
         try {
-            if(currentAccount) {
+            console.log(owner)
+            if(owner) {
                 const contractBalance = await contract.balanceOf()
                 setBalance(ethers.utils.formatEther(contractBalance))
             }
@@ -212,12 +213,23 @@ export const BlockchainProvider = ({ children }) => {
     
     const getOwnerBalance = async() => {
         try {
-            if(currentAccount) {
+            if(owner) {
                 const ownerBalance = await contract.getOwnerBalance()
                 setOwnerBalance(ethers.utils.formatEther(ownerBalance))
             }
         } catch (error) {
             console.log(error)
+        }
+    }
+
+    const ownerWithdraw = async() => {
+        try {
+            const ownerBalance = await contract.withdrawOwnerBalance()
+            await ownerBalance.wait()
+            await getOwnerBalance()
+            await getBalance()
+        } catch (error) {
+
         }
     }
 
@@ -232,7 +244,7 @@ export const BlockchainProvider = ({ children }) => {
         isOwner()
         getBalance()
         getOwnerBalance()
-    }, [currentAccount])
+    }, [currentAccount, owner])
 
     return (
         <BlockchainContext.Provider
@@ -252,7 +264,8 @@ export const BlockchainProvider = ({ children }) => {
             checkOut,
             checkIn,
             balance,
-            ownerBalance
+            ownerBalance,
+            ownerWithdraw
         }}>
                 { children }
         </BlockchainContext.Provider>
