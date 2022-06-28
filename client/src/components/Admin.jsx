@@ -4,6 +4,7 @@ import { BlockchainContext } from "../context/BlockchainContext"
 import { ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 import { MdOutlineAccountBalanceWallet } from 'react-icons/md'
+import WithdrawForm from './WithdrawForm'
 
 function StatsCard(props) {
     const { title, stat, icon, bgColor } = props;
@@ -61,15 +62,7 @@ export default function Admin() {
                             icon={<MdOutlineAccountBalanceWallet size={'3em'} />}
                         />
                     </SimpleGrid>
-                    <Flex justifyContent={'center'} alignItems={'center'}>
-                        <chakra.h2
-                            textAlign={'center'}
-                            fontSize={'24'}
-                            py={10}
-                            fontWeight={'bold'}>
-                            Withdraw your earnings:
-                        </chakra.h2>                        
-                    </Flex>
+                    <WithdrawForm />
                 </Box>
                 <ToastContainer autoClose={10000} />
             </>
@@ -77,14 +70,15 @@ export default function Admin() {
         : (
             <>
             <Box maxW="7xl" mx={'auto'} pt={5} px={{ base: 2, sm: 12, md: 17 }}>
-                    <chakra.h1
-                        textAlign={'center'}
-                        fontSize={'48'}
-                        py={10}
-                        fontWeight={'bold'}>
-                        Access Denied
-                    </chakra.h1>
-                </Box>
+                <chakra.h1
+                    textAlign={'center'}
+                    fontSize={'48'}
+                    py={10}
+                    fontWeight={'bold'}>
+                    Access Denied
+                </chakra.h1>
+            </Box>
+            <ToastContainer autoClose={10000} />
             </>
         )
     )
